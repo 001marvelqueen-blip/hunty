@@ -291,12 +291,14 @@ export const huntsBulkBodySchema = z.object({
     .array(z.union([z.string(), z.number()]))
     .min(1, { message: "huntIds must be a non-empty array" }),
   confirmed: z.boolean().optional(),
+  actorAddress: nonEmptyStringSchema,
 });
 
 // ─── v1 / Hunts / [id] / Archive ─────────────────────────────────────────────
 
 export const huntArchiveBodySchema = z.object({
   action: z.enum(["archive", "unarchive"]),
+  actorAddress: nonEmptyStringSchema,
 });
 
 // ─── v1 / Hunts / [id] / Delete ──────────────────────────────────────────────
@@ -304,6 +306,7 @@ export const huntArchiveBodySchema = z.object({
 export const huntDeleteBodySchema = z.object({
   action: z.enum(["soft-delete", "restore", "permanent-delete"]),
   confirmed: z.boolean().optional(),
+  actorAddress: nonEmptyStringSchema,
 });
 
 // ─── v1 / Hunts / Versions ──────────────────────────────────────────────────
@@ -323,19 +326,6 @@ export const huntVersionRestoreBodySchema = z.object({
 
 export const huntVersionsQuerySchema = z.object({
   actorAddress: nonEmptyStringSchema,
-})
-
-// ─── v1 / Hunts / [id] / Refund ──────────────────────────────────────────────
-
-/**
- * POST /api/v1/hunts/[id]/refund
- *
- * Allows a hunt creator to reclaim the unclaimed reward balance once the hunt
- * has ended AND the grace period (set at hunt creation) has elapsed.
- */
-export const huntRefundBodySchema = z.object({
-  /** Stellar G-address of the creator requesting the refund. */
-  creatorAddress: stellarAddressSchema,
 })
 
 // ─── v1 / Hunts / [id] / Collaborators ───────────────────────────────────────
